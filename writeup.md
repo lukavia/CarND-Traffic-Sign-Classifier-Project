@@ -36,11 +36,42 @@ For signs like priority path the images cant be rotated 90% left and right to ac
 
 Todo: The data can be extended even more by blurring, gassing, grayscalling the images in classes that don't have enough samples. Unfortunately I didn't had the time for that. 
 
+### Preprocessing
+
+I'be preprocess the data with zero mean by using the suggested formula (pixel - 128) / 128. My first try without normalization had very low accuracy. By adding this normalization the results ware significantly better 
 
 #### Model architecture
 
 I used the LeNet model from the lab and added gropout to each activation. This makes sampling less bias. 
+The final model had the folloing architecture
 
+| Layer			        | Description									| 
+|:---------------------:|:---------------------------------------------:| 
+| Input 32x32x3			| The input image 								| 
+| Convolution 5x5 		| 1x1 stride, valid padding, Output 28x28x6 	| 
+| Relu					| Relu activation 								| 
+| Dropout				| Dropout of 0.5 								| 
+| maxpool 2x2			| Output 14x14x6 								| 
+|:---------------------:|:---------------------------------------------:|
+| Convolution 5x5		| 1x1 stride, valid padding, Output 10x10x16 	| 
+| Relu					| Relu activation								| 
+| Dropout				| Dropout of 0.5 								| 
+| maxpool				| Output 5x5x16 								| 
+| flattern				| Flattern Output 400 							| 
+|:---------------------:|:---------------------------------------------:|
+| matmul				| Output 120 									| 
+| Relu					| Relu activation								| 
+| dropout				| Dropout of 0.5 								| 
+|:---------------------:|:---------------------------------------------:|
+| matmul				| Output 84 									| 
+| Relu					| Relu activation								| 
+| dropout				| Dropout of 0.5 								| 
+|:---------------------:|:---------------------------------------------:|
+| matmul				| output 43 									| 
+
+A total of 5 layars 2 convolutions and 3 fully connected.
+
+I chose to use the LeNet model since from the lessons it was obvious it process images well. And with just switching the input data from the LeNet lab with the german traffic sings data produced 0.84 accuracy. 
 
 ### Training the model
 
